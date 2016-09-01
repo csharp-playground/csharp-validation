@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using FluentAssertions;
+using System.Collections.Generic;
 
 namespace CSharpValidation {
 
@@ -11,9 +12,12 @@ namespace CSharpValidation {
 
 		[MaxLength(2), StringLength(2)]
 		public string B { set; get; } = "BBB";
+
+		[Required]
+		public string C { set; get; }
 	}
 
-	public class ValidationSpec {
+	public class ValicationPriority {
 
 		[Test]
 		public void ShouldValidateData() {
@@ -32,6 +36,15 @@ namespace CSharpValidation {
 			var data = new Data();
 			check("A", data.A).Should().Be(typeof(StringLengthAttribute));
 			check("B", data.B).Should().Be(typeof(StringLengthAttribute));
+		}
+
+		[Test]
+		public void ShouldGetValidationError() {
+			var data = new Data();
+			var context = new ValidationContext(data);
+			var errors = new List<ValidationResult>();
+			Validator.TryValidateObject(data, context, errors);
+			errors.Count.Should().Be(1);
 		}
 	}
 }
