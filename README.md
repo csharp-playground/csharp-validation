@@ -1,7 +1,13 @@
 ## `C#` Validation
 
-
 ## Priority?
+
+Validation ใน C# มี Priority หรือไม่
+
+- ใส่ StringLength ก่อน MaxLength
+- ใส่ MaxLength ก่อน StringLength
+
+ทดสอบกับ Mono บน Mac พบว่าจะ Error StringLength ก่อนเสมอ
 
 ```csharp
 class Data {
