@@ -1,6 +1,6 @@
 ## `C#` Validation
 
-## Priority?
+## Validator attribute มี Priority หรือไม่?
 
 Validation ใน C# มี Priority หรือไม่
 
@@ -42,7 +42,7 @@ public class ValidationSpec {
 }
 ```
 
-## แสดง Error ทั้งหมด
+## แสดง Validation Message ทั้งหมด
 
 ```csharp
 [Test]
@@ -53,4 +53,30 @@ public void ShouldGetValidationError() {
     Validator.TryValidateObject(data, context, errors);
     errors.Count.Should().Be(1);
 }
+```
+
+## ดูเหมือนว่า RangeAttribute จะไม่ถูก Validate ด้วย Validator เหมือน MinLength
+
+```fsharp
+type Data() =
+      [<Required>]
+      [<Range(10, 20)>]
+      member val Value = 0 with set,get
+
+      [<MinLength(10)>]
+      member val Text = "" with set, get
+
+[<Test>]
+let shouldValidateRange() =
+      let data = Data()
+      let context = ValidationContext(data)
+      Validator.ValidateObject(data, context)
+
+      context.MemberName <- "Value"
+      //let err = Assert.Throws<ValidationException>(fun x -> Validator.ValidateProperty(data.Value, context))
+      //err.ValidationAttribute.GetType().Should().Be(typeof<RangeAttribute>, "") |> ignore
+
+      context.MemberName <- "Text"
+      let err = Assert.Throws<ValidationException>(fun x -> Validator.ValidateProperty(data.Text, context))
+      err.ValidationAttribute.GetType().Should().Be(typeof<MinLengthAttribute>, "") |> ignore
 ```

@@ -20,7 +20,7 @@ let shouldValidateRange() =
 
       context.MemberName <- "Value"
       //let err = Assert.Throws<ValidationException>(fun x -> Validator.ValidateProperty(data.Value, context))
-      //err.ValidationAttribute.Should().Be(typeof<RangeAttribute>, "") |> ignore
+      //err.ValidationAttribute.GetType().Should().Be(typeof<RangeAttribute>, "") |> ignore
 
       context.MemberName <- "Text"
       let err = Assert.Throws<ValidationException>(fun x -> Validator.ValidateProperty(data.Text, context))
